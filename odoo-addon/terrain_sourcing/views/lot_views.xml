@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <record id="view_terrain_coffee_lot_list" model="ir.ui.view">
+    <field name="name">terrain.coffee.lot.list</field>
+    <field name="model">terrain.coffee.lot</field>
+    <field name="arch" type="xml">
+      <list string="Coffee Lots">
+        <field name="lot_code"/>
+        <field name="supplier_id"/>
+        <field name="name"/>
+        <field name="grade"/>
+        <field name="process"/>
+        <field name="washing_station_id"/>
+        <field name="export_ready_date"/>
+        <field name="sca_score"/>
+        <field name="has_price_breakdown" widget="boolean"/>
+      </list>
+    </field>
+  </record>
+
+  <record id="view_terrain_coffee_lot_form" model="ir.ui.view">
+    <field name="name">terrain.coffee.lot.form</field>
+    <field name="model">terrain.coffee.lot</field>
+    <field name="arch" type="xml">
+      <form string="Coffee Lot">
+        <sheet>
+          <group>
+            <group string="Identification">
+              <field name="lot_code"/>
+              <field name="name"/>
+              <field name="supplier_id"/>
+              <field name="company_id" groups="base.group_multi_company"/>
+            </group>
+            <group string="Quality">
+              <field name="grade"/>
+              <field name="process"/>
+              <field name="variety"/>
+              <field name="sca_score"/>
+            </group>
+          </group>
+          <group>
+            <group string="Origin">
+              <field name="farm_ids" widget="many2many_tags"/>
+              <field name="washing_station_id"/>
+              <field name="altitude_range"/>
+            </group>
+            <group string="Logistics">
+              <field name="harvest_date"/>
+              <field name="export_ready_date"/>
+              <field name="bag_weight_kg"/>
+              <field name="screen_size"/>
+              <field name="moisture_pct"/>
+            </group>
+          </group>
+          <group string="Flavor Notes">
+            <field name="flavor_notes" nolabel="1"/>
+          </group>
+          <notebook>
+            <page string="Price Breakdown">
+              <field name="price_breakdown_id">
+                <form>
+                  <group>
+                    <group string="Cost Distribution">
+                      <field name="farmer_pct"/>
+                      <field name="washing_station_pct"/>
+                      <field name="incountry_buyer_pct"/>
+                      <field name="shipping_pct"/>
+                      <field name="importer_pct"/>
+                      <field name="total_pct" readonly="1"/>
+                    </group>
+                    <group string="Pricing">
+                      <field name="fob_price_usd"/>
+                      <field name="landed_price_usd"/>
+                    </group>
+                  </group>
+                  <group string="Transparency Notes">
+                    <field name="notes" nolabel="1"/>
+                  </group>
+                </form>
+              </field>
+            </page>
+          </notebook>
+        </sheet>
+        <chatter/>
+      </form>
+    </field>
+  </record>
+
+  <record id="action_terrain_coffee_lot" model="ir.actions.act_window">
+    <field name="name">Coffee Lots</field>
+    <field name="res_model">terrain.coffee.lot</field>
+    <field name="view_mode">list,form</field>
+  </record>
+
+</odoo>

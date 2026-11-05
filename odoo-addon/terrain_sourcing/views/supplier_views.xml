@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <record id="view_terrain_supplier_list" model="ir.ui.view">
+    <field name="name">terrain.supplier.list</field>
+    <field name="model">terrain.supplier</field>
+    <field name="arch" type="xml">
+      <list string="Suppliers">
+        <field name="supplier_code"/>
+        <field name="name"/>
+        <field name="certifications"/>
+        <field name="farm_count"/>
+        <field name="lot_count"/>
+        <field name="state"/>
+      </list>
+    </field>
+  </record>
+
+  <record id="view_terrain_supplier_form" model="ir.ui.view">
+    <field name="name">terrain.supplier.form</field>
+    <field name="model">terrain.supplier</field>
+    <field name="arch" type="xml">
+      <form string="Supplier">
+        <header>
+          <field name="state" widget="statusbar" statusbar_visible="draft,active"/>
+        </header>
+        <sheet>
+          <div class="oe_button_box" name="button_box">
+            <button name="%(action_terrain_farm)d" type="action"
+                    class="oe_stat_button" icon="fa-leaf"
+                    context="{'default_supplier_id': active_id}">
+              <field name="farm_count" widget="statinfo" string="Farms"/>
+            </button>
+            <button name="%(action_terrain_coffee_lot)d" type="action"
+                    class="oe_stat_button" icon="fa-coffee"
+                    context="{'default_supplier_id': active_id}">
+              <field name="lot_count" widget="statinfo" string="Lots"/>
+            </button>
+          </div>
+          <group>
+            <group>
+              <field name="partner_id"/>
+              <field name="supplier_code"/>
+              <field name="certifications"/>
+            </group>
+            <group>
+              <field name="company_id" groups="base.group_multi_company"/>
+            </group>
+          </group>
+          <notebook>
+            <page string="Farms">
+              <field name="farm_ids">
+                <list>
+                  <field name="name"/>
+                  <field name="region"/>
+                  <field name="altitude_min"/>
+                  <field name="altitude_max"/>
+                  <field name="state"/>
+                </list>
+              </field>
+            </page>
+            <page string="Washing Stations">
+              <field name="washing_station_ids">
+                <list>
+                  <field name="name"/>
+                  <field name="mill_type"/>
+                  <field name="altitude"/>
+                  <field name="farm_count"/>
+                </list>
+              </field>
+            </page>
+          </notebook>
+        </sheet>
+        <chatter/>
+      </form>
+    </field>
+  </record>
+
+  <record id="action_terrain_supplier" model="ir.actions.act_window">
+    <field name="name">Suppliers</field>
+    <field name="res_model">terrain.supplier</field>
+    <field name="view_mode">list,form</field>
+  </record>
+
+</odoo>

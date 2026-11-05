@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <!-- Top-level app menu -->
+  <menuitem id="menu_terrain_root"
+            name="Terrain"
+            sequence="50"
+            web_icon="terrain_sourcing,static/description/icon.png"/>
+
+  <!-- Sourcing -->
+  <menuitem id="menu_terrain_sourcing"
+            name="Sourcing"
+            parent="menu_terrain_root"
+            sequence="10"/>
+
+  <menuitem id="menu_terrain_suppliers"
+            name="Suppliers"
+            parent="menu_terrain_sourcing"
+            action="action_terrain_supplier"
+            sequence="10"/>
+
+  <menuitem id="menu_terrain_farms"
+            name="Farms"
+            parent="menu_terrain_sourcing"
+            action="action_terrain_farm"
+            sequence="20"/>
+
+  <menuitem id="menu_terrain_farmers"
+            name="Farmers"
+            parent="menu_terrain_sourcing"
+            action="action_terrain_farmer"
+            sequence="30"/>
+
+  <menuitem id="menu_terrain_washing_stations"
+            name="Washing Stations"
+            parent="menu_terrain_sourcing"
+            action="action_terrain_washing_station"
+            sequence="40"/>
+
+  <!-- Lots -->
+  <menuitem id="menu_terrain_lots_root"
+            name="Lots"
+            parent="menu_terrain_root"
+            sequence="20"/>
+
+  <menuitem id="menu_terrain_coffee_lots"
+            name="Coffee Lots"
+            parent="menu_terrain_lots_root"
+            action="action_terrain_coffee_lot"
+            sequence="10"/>
+
+</odoo>

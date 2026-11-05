@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_terrain_supplier,terrain.supplier,model_terrain_supplier,base.group_user,1,1,1,1
+access_terrain_farm,terrain.farm,model_terrain_farm,base.group_user,1,1,1,1
+access_terrain_farm_photo,terrain.farm.photo,model_terrain_farm_photo,base.group_user,1,1,1,1
+access_terrain_farmer,terrain.farmer,model_terrain_farmer,base.group_user,1,1,1,1
+access_terrain_washing_station,terrain.washing_station,model_terrain_washing_station,base.group_user,1,1,1,1
+access_terrain_coffee_lot,terrain.coffee.lot,model_terrain_coffee_lot,base.group_user,1,1,1,1
+access_terrain_price_breakdown,terrain.price.breakdown,model_terrain_price_breakdown,base.group_user,1,1,1,1

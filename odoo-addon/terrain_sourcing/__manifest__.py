@@ -1,0 +1,21 @@
+{
+    'name': 'Terrain Sourcing',
+    'version': '18.0.1.0.0',
+    'summary': 'Coffee supply chain traceability — farms, farmers, washing stations, lots, price breakdowns',
+    'author': 'Terrain',
+    'website': 'https://terrain.io',
+    'category': 'Agriculture',
+    'depends': ['base', 'mail', 'contacts'],
+    'data': [
+        'security/ir.model.access.csv',
+        'views/supplier_views.xml',
+        'views/farm_views.xml',
+        'views/farmer_views.xml',
+        'views/washing_station_views.xml',
+        'views/lot_views.xml',
+        'views/menu_views.xml',
+    ],
+    'installable': True,
+    'application': True,
+    'license': 'LGPL-3',
+}

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <record id="view_terrain_farmer_list" model="ir.ui.view">
+    <field name="name">terrain.farmer.list</field>
+    <field name="model">terrain.farmer</field>
+    <field name="arch" type="xml">
+      <list string="Farmers">
+        <field name="name"/>
+        <field name="supplier_id"/>
+        <field name="farm_id"/>
+        <field name="phone"/>
+        <field name="years_experience"/>
+      </list>
+    </field>
+  </record>
+
+  <record id="view_terrain_farmer_form" model="ir.ui.view">
+    <field name="name">terrain.farmer.form</field>
+    <field name="model">terrain.farmer</field>
+    <field name="arch" type="xml">
+      <form string="Farmer">
+        <sheet>
+          <group>
+            <group>
+              <field name="name"/>
+              <field name="farm_id"/>
+              <field name="supplier_id" readonly="1"/>
+              <field name="company_id" groups="base.group_multi_company"/>
+            </group>
+            <group>
+              <field name="phone"/>
+              <field name="years_experience"/>
+              <field name="photo_url"/>
+            </group>
+          </group>
+          <group string="Notes">
+            <field name="notes" nolabel="1"/>
+          </group>
+        </sheet>
+        <chatter/>
+      </form>
+    </field>
+  </record>
+
+  <record id="action_terrain_farmer" model="ir.actions.act_window">
+    <field name="name">Farmers</field>
+    <field name="res_model">terrain.farmer</field>
+    <field name="view_mode">list,form</field>
+  </record>
+
+</odoo>

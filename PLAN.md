@@ -24,6 +24,7 @@ Organization (res.company)
 ### 1. `terrain.supplier` (extends `res.partner`)
 | Field | Type | Notes |
 |---|---|---|
+| company_id | Many2one → res.company | multi-tenant isolation — required on all models |
 | supplier_code | Char | e.g. ETH-HAD-001 |
 | is_supplier | Boolean | flag on res.partner |
 | certifications | Char | organic, fair trade, etc. |
@@ -32,6 +33,7 @@ Organization (res.company)
 ### 2. `terrain.farm`
 | Field | Type | Notes |
 |---|---|---|
+| company_id | Many2one → res.company | multi-tenant isolation |
 | name | Char | farm name |
 | supplier_id | Many2one → terrain.supplier | |
 | region | Char | Guji, Yirgacheffe, Sidama… |
@@ -47,6 +49,7 @@ Organization (res.company)
 ### 3. `terrain.farm.photo`
 | Field | Type | Notes |
 |---|---|---|
+| company_id | Many2one → res.company | multi-tenant isolation |
 | farm_id | Many2one → terrain.farm | |
 | s3_url | Char | photo URL in S3 |
 | lat / lng | Float | EXIF-extracted GPS |
@@ -55,6 +58,7 @@ Organization (res.company)
 ### 4. `terrain.farmer`
 | Field | Type | Notes |
 |---|---|---|
+| company_id | Many2one → res.company | multi-tenant isolation |
 | name | Char | |
 | farm_id | Many2one → terrain.farm | |
 | phone | Char | |
@@ -64,6 +68,7 @@ Organization (res.company)
 ### 5. `terrain.washing_station`
 | Field | Type | Notes |
 |---|---|---|
+| company_id | Many2one → res.company | multi-tenant isolation |
 | name | Char | e.g. Gigesa Washing Station |
 | supplier_id | Many2one → terrain.supplier | |
 | farm_ids | Many2many → terrain.farm | farms it receives from |
@@ -76,6 +81,7 @@ Organization (res.company)
 ### 6. `terrain.coffee.lot`
 | Field | Type | Notes |
 |---|---|---|
+| company_id | Many2one → res.company | multi-tenant isolation |
 | lot_code | Char | e.g. 030905 |
 | supplier_id | Many2one → terrain.supplier | |
 | farm_ids | Many2many → terrain.farm | |
@@ -96,6 +102,7 @@ Organization (res.company)
 ### 7. `terrain.price.breakdown`
 | Field | Type | Notes |
 |---|---|---|
+| company_id | Many2one → res.company | multi-tenant isolation |
 | lot_id | One2one → terrain.coffee.lot | |
 | farmer_pct | Float | % of FOB that reaches farmer |
 | washing_station_pct | Float | |
