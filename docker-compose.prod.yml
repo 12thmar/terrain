@@ -1,0 +1,9 @@
+services:
+  terrain-app:
+    env_file:
+      - ./backend/.env
+    volumes: []
+    restart: always
+
+  terrain-web:
+    restart: always

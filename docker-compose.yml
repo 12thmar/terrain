@@ -1,0 +1,29 @@
+services:
+  terrain-app:
+    container_name: terrain-app
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    working_dir: /var/www/html
+    expose:
+      - "9000"
+    volumes:
+      - ./backend:/var/www/html
+    networks:
+      - app-net
+
+  terrain-web:
+    image: nginx:1.27-alpine
+    container_name: terrain-web
+    depends_on:
+      - terrain-app
+    volumes:
+      - ./backend/public:/var/www/html/public:ro
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    networks:
+      - app-net
+
+networks:
+  app-net:
+    external: true
+    name: app-net

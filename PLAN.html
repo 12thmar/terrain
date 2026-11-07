@@ -355,6 +355,25 @@
 
   .ph-1 .phase-num { background: var(--green-dark); }
   .ph-2 .phase-num { background: var(--green-mid); }
+
+  .phase-done .phase-body {
+    border-left: 4px solid var(--green-light);
+    background: #f4faf7;
+  }
+  .phase-done .phase-body h3::after {
+    content: ' ✓ Done';
+    display: inline-block;
+    margin-left: 10px;
+    font-size: 11px;
+    font-family: 'Courier New', monospace;
+    background: var(--green-light);
+    color: white;
+    padding: 2px 8px;
+    border-radius: 999px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    vertical-align: middle;
+  }
   .ph-3 .phase-num { background: var(--green-light); }
   .ph-4 .phase-num { background: var(--caramel); }
   .ph-5 .phase-num { background: var(--terracotta); }
@@ -753,9 +772,9 @@
     <div class="section-label">Odoo Customization</div>
     <h2>Addon: terrain_sourcing</h2>
     <p style="color:var(--text-muted); font-size:14px; margin: 16px 0;">
-      Goes into <code style="background:var(--cream-dark); padding:2px 6px; border-radius:4px; font-size:12px;">buna-serat</code> at
-      <code style="background:var(--cream-dark); padding:2px 6px; border-radius:4px; font-size:12px;">/mnt/extra-addons/terrain_sourcing/</code>.
-      The docker-compose.yaml already has the volume mount commented out — just needs uncommenting.
+      Lives at <code style="background:var(--cream-dark); padding:2px 6px; border-radius:4px; font-size:12px;">buna-serat/addons/terrain_sourcing/</code>,
+      mounted into the container at <code style="background:var(--cream-dark); padding:2px 6px; border-radius:4px; font-size:12px;">/mnt/extra-addons/terrain_sourcing/</code>.
+      Installed and active at <strong>crm.bunaroots.com</strong>.
     </p>
     <div style="background:var(--cream-dark); border-radius:12px; padding:24px; font-family:'Courier New',monospace; font-size:13px; line-height:2; color:var(--text);">
       terrain_sourcing/<br>
@@ -782,14 +801,14 @@
     <h2>Implementation Phases</h2>
     <div class="phases">
 
-      <div class="phase ph-1">
+      <div class="phase ph-1 phase-done">
         <div class="phase-num">1</div>
         <div class="phase-body">
           <h3>Odoo Addon — terrain_sourcing (buna-serat)</h3>
           <ul>
-            <li>Define all 7 models with fields, relationships, security rules</li>
-            <li>Uncomment extra-addons volume in docker-compose.yaml</li>
-            <li>Enable and test addon in buna-serat dev environment</li>
+            <li>All 7 models built with fields, relationships, and security rules</li>
+            <li>Addon deployed to buna-serat and installed at crm.bunaroots.com</li>
+            <li>GitHub Actions CI wired (OIDC role: buna-serat-github-deploy) — triggers on addons/** and deploy/**</li>
           </ul>
         </div>
       </div>

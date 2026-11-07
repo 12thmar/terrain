@@ -1,0 +1,17 @@
+# Laravel
+backend/vendor/
+backend/node_modules/
+backend/public/build/
+backend/.env
+backend/database/database.sqlite
+backend/storage/framework/cache/
+backend/storage/framework/sessions/
+backend/storage/framework/views/
+backend/bootstrap/cache/*.php
+backend/.phpunit.result.cache
+
+# Docker
+backend/.env.prod
+
+# OS
+.DS_Store

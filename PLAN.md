@@ -171,7 +171,7 @@ Flow: Google login → email found in local `suppliers` → `odoo_id` loaded int
 
 ## Odoo Addon: `terrain_sourcing`
 
-Goes into `buna-serat` at `/mnt/extra-addons/terrain_sourcing/`. The docker-compose.yaml already has the volume mount commented out — just needs uncommenting.
+Lives at `buna-serat/addons/terrain_sourcing/`, mounted into the container at `/mnt/extra-addons/terrain_sourcing/`. Installed and active at `crm.bunaroots.com`.
 
 ```
 terrain_sourcing/
@@ -195,8 +195,8 @@ terrain_sourcing/
 
 ## Implementation Phases
 
-### Phase 1 — Odoo Addon (buna-serat)
-Define all 7 models with relationships and security rules. Enable addon in dev.
+### Phase 1 — Odoo Addon (buna-serat) ✅ DONE
+All 7 models built and deployed. `terrain_sourcing` addon installed and active at `crm.bunaroots.com`. GitHub Actions CI wired up and working (OIDC role: `buna-serat-github-deploy`). Workflow now triggers on `addons/**` and `deploy/**` changes.
 
 ### Phase 2 — App Scaffold (terrain)
 - Laravel backend: supplier auth, S3 upload endpoint, OdooClient for terrain models
