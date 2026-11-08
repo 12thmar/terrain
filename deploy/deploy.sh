@@ -68,3 +68,4 @@ sudo docker-compose \
   -f /opt/terrain/docker-compose.yml \
   -f /opt/terrain/docker-compose.prod.yml \
   ps | grep -E "terrain-(app|web)" || { echo "DEPLOYMENT FAILED: containers not running"; exit 1; }
+# deployed 2026-11-08
