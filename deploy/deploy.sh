@@ -1,6 +1,8 @@
 #!/bin/bash
 set -euo pipefail
 
+export PATH="/usr/local/bin:/usr/bin:/bin:$PATH"
+
 # Injected by GitHub Actions workflow
 ENV_B64="__ENV_B64__"
 PAT_B64="__PAT_B64__"
