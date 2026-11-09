@@ -12,6 +12,7 @@
     <div id="app"
          data-page="{{ $page ?? 'login' }}"
          data-supplier="{{ isset($supplier) ? json_encode(['id' => $supplier->id, 'name' => $supplier->name, 'email' => $supplier->email, 'avatar' => $supplier->avatar, 'role' => $supplier->role, 'odoo_id' => $supplier->odoo_id]) : 'null' }}"
+         data-farms="{{ isset($farms) ? json_encode($farms) : '[]' }}"
          data-error="{{ $error ?? '' }}">
     </div>
 </body>

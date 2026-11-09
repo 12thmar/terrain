@@ -21,4 +21,9 @@ class Supplier extends Authenticatable
     {
         return $this->role === 'admin';
     }
+
+    public function farms()
+    {
+        return $this->hasMany(Farm::class);
+    }
 }

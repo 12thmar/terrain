@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\FarmController;
 use App\Http\Controllers\UploadController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -20,9 +21,19 @@ Route::middleware('supplier.auth')->group(function () {
     Route::get('/', fn() => redirect('/dashboard'));
     Route::get('/dashboard', function (Request $request) {
         $supplier = $request->attributes->get('supplier');
-        return view('app', ['page' => 'dashboard', 'supplier' => $supplier]);
+        $farms = $supplier->farms()->with('photos')->orderByDesc('created_at')->get()
+            ->map(fn($f) => [
+                'id'     => $f->id,
+                'name'   => $f->name,
+                'region' => $f->region,
+                'state'  => $f->state,
+                'cover'  => $f->photos->first()?->s3_url,
+            ]);
+        return view('app', ['page' => 'dashboard', 'supplier' => $supplier, 'farms' => $farms]);
     });
     Route::post('/upload/photo', [UploadController::class, 'photo']);
+    Route::post('/farms', [FarmController::class, 'store']);
+    Route::get('/farms', [FarmController::class, 'index']);
 });
 
 Route::get('/health', fn() => response()->json(['status' => 'ok']));
