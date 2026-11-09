@@ -1,7 +1,13 @@
 import React from 'react';
 import Layout from '../components/Layout';
 
-export default function Dashboard({ supplier }) {
+const CARDS = [
+    { label: 'Farms', icon: '🌱', desc: 'Register and manage your farms', page: 'farm-register' },
+    { label: 'Washing Stations', icon: '💧', desc: 'Link farms to washing stations', page: null },
+    { label: 'Coffee Lots', icon: '☕', desc: 'Submit lots and price breakdowns', page: null },
+];
+
+export default function Dashboard({ supplier, navigate }) {
     return (
         <Layout supplier={supplier}>
             <div className="mb-8">
@@ -14,17 +20,20 @@ export default function Dashboard({ supplier }) {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-                {[
-                    { label: 'Farms', icon: '🌱', desc: 'Register and manage your farms' },
-                    { label: 'Washing Stations', icon: '💧', desc: 'Link farms to washing stations' },
-                    { label: 'Coffee Lots', icon: '☕', desc: 'Submit lots and price breakdowns' },
-                ].map(card => (
-                    <div key={card.label} className="bg-white rounded-xl border border-gray-100 p-6 hover:shadow-md transition-shadow cursor-pointer">
+                {CARDS.map(card => (
+                    <div
+                        key={card.label}
+                        onClick={() => card.page && navigate(card.page)}
+                        className="bg-white rounded-xl border border-gray-100 p-6 transition-shadow"
+                        style={{ cursor: card.page ? 'pointer' : 'default' }}
+                        onMouseEnter={e => card.page && (e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.08)')}
+                        onMouseLeave={e => (e.currentTarget.style.boxShadow = '')}
+                    >
                         <div className="text-2xl mb-3">{card.icon}</div>
                         <h3 className="font-semibold text-sm" style={{ color: '#1e3a2f' }}>{card.label}</h3>
                         <p className="text-xs mt-1" style={{ color: '#9aab9f' }}>{card.desc}</p>
                         <div className="mt-4 text-xs font-medium" style={{ color: '#c47c3a' }}>
-                            Coming soon →
+                            {card.page ? 'Register →' : 'Coming soon →'}
                         </div>
                     </div>
                 ))}
