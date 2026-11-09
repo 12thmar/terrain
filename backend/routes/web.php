@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UploadController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -21,6 +22,7 @@ Route::middleware('supplier.auth')->group(function () {
         $supplier = $request->attributes->get('supplier');
         return view('app', ['page' => 'dashboard', 'supplier' => $supplier]);
     });
+    Route::post('/upload/photo', [UploadController::class, 'photo']);
 });
 
 Route::get('/health', fn() => response()->json(['status' => 'ok']));
