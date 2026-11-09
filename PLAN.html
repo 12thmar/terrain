@@ -374,6 +374,28 @@
     text-transform: uppercase;
     vertical-align: middle;
   }
+  .phase-active .phase-body {
+    border-left: 4px solid var(--gold);
+    background: #fffbf2;
+  }
+  .phase-active .phase-body h3::after {
+    content: ' ⚡ In Progress';
+    display: inline-block;
+    margin-left: 10px;
+    font-size: 11px;
+    font-family: 'Courier New', monospace;
+    background: var(--gold);
+    color: white;
+    padding: 2px 8px;
+    border-radius: 999px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    vertical-align: middle;
+  }
+  .phase-active .phase-body ul li.done { color: var(--green-light); }
+  .phase-active .phase-body ul li.done::before { content: '✓'; color: var(--green-light); }
+  .phase-active .phase-body ul li.todo { color: var(--caramel); font-weight: bold; }
+  .phase-active .phase-body ul li.todo::before { content: '→'; color: var(--caramel); }
   .ph-3 .phase-num { background: var(--green-light); }
   .ph-4 .phase-num { background: var(--caramel); }
   .ph-5 .phase-num { background: var(--terracotta); }
@@ -813,14 +835,17 @@
         </div>
       </div>
 
-      <div class="phase ph-2">
+      <div class="phase ph-2 phase-active">
         <div class="phase-num">2</div>
         <div class="phase-body">
           <h3>App Scaffold — terrain repo</h3>
           <ul>
-            <li>Laravel backend: supplier auth, S3 upload endpoint, OdooClient extensions</li>
-            <li>React frontend: portal shell, login page, supplier dashboard skeleton</li>
-            <li>Docker Compose dev setup</li>
+            <li class="done">Laravel backend: Google OAuth + supplier auth (AuthController, RequireSupplierAuth middleware, Supplier model)</li>
+            <li class="done">React frontend: Login page, Dashboard skeleton, Layout component</li>
+            <li class="done">Docker Compose (dev + prod), Dockerfile, nginx config, entrypoint</li>
+            <li class="done">GHA deploy pipeline: OIDC → IAM role → SSM → EC2 (working)</li>
+            <li class="todo">S3 upload endpoint missing — no UploadController yet</li>
+            <li class="todo">terrain containers not running on EC2 — deploy needs a trigger</li>
           </ul>
         </div>
       </div>
