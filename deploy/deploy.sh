@@ -32,27 +32,27 @@ echo "--- Writing .env ---"
 echo "$ENV_B64" | base64 -d | sudo tee /opt/terrain/backend/.env > /dev/null
 
 echo "--- Pulling / building images ---"
-sudo docker-compose \
+sudo docker compose \
   --project-name terrain \
   -f /opt/terrain/docker-compose.yml \
   -f /opt/terrain/docker-compose.prod.yml \
   pull --ignore-pull-failures || true
 
-sudo docker-compose \
+sudo docker compose \
   --project-name terrain \
   -f /opt/terrain/docker-compose.yml \
   -f /opt/terrain/docker-compose.prod.yml \
   build
 
 echo "--- Stopping old containers ---"
-sudo docker-compose \
+sudo docker compose \
   --project-name terrain \
   -f /opt/terrain/docker-compose.yml \
   -f /opt/terrain/docker-compose.prod.yml \
   down
 
 echo "--- Starting containers ---"
-sudo docker-compose \
+sudo docker compose \
   --project-name terrain \
   -f /opt/terrain/docker-compose.yml \
   -f /opt/terrain/docker-compose.prod.yml \
@@ -65,7 +65,7 @@ echo "--- Terrain logs ---"
 sudo docker logs terrain-app --tail=30 2>&1 || echo "terrain-app not found"
 
 echo "--- Running containers ---"
-sudo docker-compose \
+sudo docker compose \
   --project-name terrain \
   -f /opt/terrain/docker-compose.yml \
   -f /opt/terrain/docker-compose.prod.yml \
