@@ -1,8 +1,10 @@
 FROM php:8.3-fpm
 
+ENV DEBIAN_FRONTEND=noninteractive
+
 WORKDIR /var/www/html
 
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends \
       git \
       unzip \
       curl \
@@ -12,9 +14,10 @@ RUN apt-get update && apt-get install -y \
       libpq-dev \
       nodejs \
       npm \
-    && docker-php-ext-install intl pdo zip pdo_sqlite pdo_pgsql \
-    && docker-php-ext-enable opcache \
     && rm -rf /var/lib/apt/lists/*
+
+RUN docker-php-ext-install intl pdo zip pdo_sqlite pdo_pgsql \
+    && docker-php-ext-enable opcache
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
