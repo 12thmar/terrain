@@ -481,14 +481,16 @@
 <!-- HERO -->
 <div class="hero">
   <div class="hero-inner">
-    <div class="hero-tag">Platform Plan · v1.0</div>
+    <div class="hero-tag">Platform Plan · v2.0</div>
     <h1><span>Terrain</span><br>Traceability Platform</h1>
-    <p class="hero-sub">From farm to roaster — full supply chain transparency for specialty coffee.</p>
+    <p class="hero-sub">From farm to roaster — full supply chain transparency for specialty coffee.<br>
+    <span style="color:var(--gold); font-size:15px;">InshaAllah — every coffee farm in Ethiopia.</span></p>
     <div class="hero-meta">
       <div class="hero-meta-item"><strong>terrain.io</strong>Domain</div>
-      <div class="hero-meta-item"><strong>Odoo 18</strong>Data Store</div>
+      <div class="hero-meta-item"><strong>Neon + Odoo</strong>Data Layer</div>
       <div class="hero-meta-item"><strong>React + Laravel</strong>Stack</div>
       <div class="hero-meta-item"><strong>Bunaroots</strong>Customer #1</div>
+      <div class="hero-meta-item"><strong>All ET Farms</strong>Vision</div>
     </div>
   </div>
 </div>
@@ -699,9 +701,14 @@
         <td>terrain-uploads-prod / terrain-uploads-dev</td>
       </tr>
       <tr>
-        <td>Data store</td>
-        <td>Odoo 18 JSON-RPC</td>
-        <td>crm.bunaroots.com:8069</td>
+        <td>Operational DB</td>
+        <td>Neon — managed PostgreSQL + PostGIS</td>
+        <td>Fast writes, spatial queries, zero maintenance, free tier</td>
+      </tr>
+      <tr>
+        <td>Business layer</td>
+        <td>Odoo 18 JSON-RPC — async sync</td>
+        <td>crm.bunaroots.com:8069 · receives data after Neon write</td>
       </tr>
       <tr>
         <td>Auth</td>
@@ -751,10 +758,10 @@
 
       </div>
       <p style="font-size:12px; color:var(--text-muted); margin-top:10px;">
-        Google login → email found in local <code style="background:var(--cream-dark); padding:1px 5px; border-radius:3px;">suppliers</code>
-        → <code style="background:var(--cream-dark); padding:1px 5px; border-radius:3px;">odoo_id</code> loaded into session
-        → all data ops scoped to that Odoo record.
-        Same bridge pattern as buna-jebena's <code style="background:var(--cream-dark); padding:1px 5px; border-radius:3px;">leads</code> table.
+        Google login → email found in <code style="background:var(--cream-dark); padding:1px 5px; border-radius:3px;">suppliers</code> (Neon)
+        → session set → all farm/lot writes go to <strong>Neon first</strong> (fast, always available)
+        → async job syncs to Odoo → <code style="background:var(--cream-dark); padding:1px 5px; border-radius:3px;">odoo_id</code> written back.
+        If Odoo is slow or down, field workers keep registering farms uninterrupted.
       </p>
     </div>
 
@@ -835,30 +842,32 @@
         </div>
       </div>
 
-      <div class="phase ph-2 phase-active">
+      <div class="phase ph-2 phase-done">
         <div class="phase-num">2</div>
         <div class="phase-body">
           <h3>App Scaffold — terrain repo</h3>
           <ul>
-            <li class="done">Laravel backend: Google OAuth + supplier auth (AuthController, RequireSupplierAuth middleware, Supplier model)</li>
-            <li class="done">React frontend: Login page, Dashboard skeleton, Layout component</li>
-            <li class="done">Docker Compose (dev + prod), Dockerfile, nginx config, entrypoint</li>
-            <li class="done">GHA deploy pipeline: OIDC → IAM role → SSM → EC2 (working)</li>
-            <li class="todo">S3 upload endpoint missing — no UploadController yet</li>
-            <li class="todo">terrain containers not running on EC2 — deploy needs a trigger</li>
+            <li>Laravel backend: Google OAuth + supplier auth (AuthController, RequireSupplierAuth middleware, Supplier model)</li>
+            <li>React frontend: Login page, Dashboard, Layout — client-side navigation</li>
+            <li>Docker Compose (dev + prod), Dockerfile, nginx config, entrypoint with auto-migrate</li>
+            <li>GHA deploy pipeline: OIDC → IAM role → SSM → EC2 (working)</li>
+            <li>S3 upload endpoint — UploadController POST /upload/photo, league/flysystem-aws-s3-v3</li>
+            <li>Farm registration form + PhotoUpload component (exifr EXIF GPS extraction)</li>
+            <li>FarmController POST/GET /farms — Farm + FarmPhoto models + migrations</li>
+            <li>Dashboard farm grid with cover photo and state badge</li>
           </ul>
         </div>
       </div>
 
-      <div class="phase ph-3">
+      <div class="phase ph-3 phase-active">
         <div class="phase-num">3</div>
         <div class="phase-body">
-          <h3>Farm + Location</h3>
+          <h3>Database Foundation + Farm Location</h3>
           <ul>
-            <li>Farm registration form (name, region, altitude, variety)</li>
-            <li>Photo upload with client-side EXIF GPS extraction via exifr</li>
-            <li>Leaflet.js map fallback for manual location pin</li>
-            <li>Farm profile page</li>
+            <li class="todo">🚨 Switch SQLite → Neon PostgreSQL + PostGIS — data wipes on every deploy today</li>
+            <li class="todo">Enable PostGIS extension on Neon — enables spatial queries for all ET farms</li>
+            <li class="todo">Leaflet.js map — manual GPS pin when photos have no EXIF</li>
+            <li class="todo">Farm profile page — view registered farm with photos and map pin</li>
           </ul>
         </div>
       </div>
@@ -895,6 +904,21 @@
             <li>Pull lot + farm data from Odoo API into buna-sinni product pages</li>
             <li>Roasters see full chain before buying</li>
             <li>Thomas's question answered on the page</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="phase" style="--ph-color:#2c4a7c;">
+        <div class="phase-num" style="background:#2c4a7c;">7</div>
+        <div class="phase-body" style="border-left:4px solid #2c4a7c;">
+          <h3>Ethiopia Scale — InshaAllah</h3>
+          <ul>
+            <li>Public map — every registered farm in Ethiopia, filterable by region, grade, process</li>
+            <li>PostGIS spatial queries — "farms within 50km", regional density heatmap</li>
+            <li>Mobile-first offline API — field workers register farms without internet, sync when connected</li>
+            <li>Multi-tenant expansion — other Ethiopian exporters can onboard as customers</li>
+            <li>Open farm registry — partner with ECX / ECTA to make data public and verifiable</li>
+            <li>Terrain becomes the standard identity layer for Ethiopian coffee farms</li>
           </ul>
         </div>
       </div>
@@ -937,6 +961,18 @@
       <dl class="decision">
         <dt>Triggered by</dt>
         <dd>Thomas @ Red Drum Roasters — Oct 27, 2026</dd>
+      </dl>
+      <dl class="decision">
+        <dt>Operational Database</dt>
+        <dd>Neon (managed PostgreSQL + PostGIS) — zero maintenance, free tier, spatial queries</dd>
+      </dl>
+      <dl class="decision">
+        <dt>Data Architecture</dt>
+        <dd>Terrain writes fast to Neon. Odoo receives async sync. Field workers never blocked by Odoo.</dd>
+      </dl>
+      <dl class="decision">
+        <dt>Vision</dt>
+        <dd>Every coffee farm in Ethiopia — InshaAllah. Terrain becomes the standard farm identity layer.</dd>
       </dl>
     </div>
   </div>
