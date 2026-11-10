@@ -43,6 +43,7 @@ jobs:
           AWS_BUCKET: ${{ secrets.AWS_BUCKET }}
           AWS_ACCESS_KEY_ID_TERRAIN: ${{ secrets.AWS_ACCESS_KEY_ID_TERRAIN }}
           AWS_SECRET_ACCESS_KEY_TERRAIN: ${{ secrets.AWS_SECRET_ACCESS_KEY_TERRAIN }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: |
           set -euo pipefail
 
@@ -61,7 +62,9 @@ jobs:
             "AWS_BUCKET=${AWS_BUCKET}" \
             "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID_TERRAIN}" \
             "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY_TERRAIN}" \
-            "AWS_DEFAULT_REGION=us-east-1")
+            "AWS_DEFAULT_REGION=us-east-1" \
+            "DATABASE_URL=${DATABASE_URL}" \
+            "DB_CONNECTION=pgsql")
 
           ENV_B64=$(printf "%s" "$ENV_CONTENT" | base64 -w 0)
           PAT_B64=$(printf "%s" "$GH_PAT" | base64 -w 0)

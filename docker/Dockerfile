@@ -9,9 +9,10 @@ RUN apt-get update && apt-get install -y \
       libicu-dev \
       libzip-dev \
       libonig-dev \
+      libpq-dev \
       nodejs \
       npm \
-    && docker-php-ext-install intl pdo zip pdo_sqlite \
+    && docker-php-ext-install intl pdo zip pdo_sqlite pdo_pgsql pgsql \
     && docker-php-ext-enable opcache \
     && rm -rf /var/lib/apt/lists/*
 
