@@ -12,7 +12,7 @@ RUN apt-get update && apt-get install -y \
       libpq-dev \
       nodejs \
       npm \
-    && docker-php-ext-install intl pdo zip pdo_sqlite pdo_pgsql pgsql \
+    && docker-php-ext-install intl pdo zip pdo_sqlite pdo_pgsql \
     && docker-php-ext-enable opcache \
     && rm -rf /var/lib/apt/lists/*
 
