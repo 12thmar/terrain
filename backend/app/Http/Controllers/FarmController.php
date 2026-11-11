@@ -69,24 +69,7 @@ class FarmController extends Controller
             ->with('photos')
             ->orderByDesc('created_at')
             ->get()
-            ->map(fn($f) => [
-                'id'             => $f->id,
-                'name'           => $f->name,
-                'region'         => $f->region,
-                'altitude_min'   => $f->altitude_min,
-                'altitude_max'   => $f->altitude_max,
-                'latitude'        => $f->latitude,
-                'longitude'       => $f->longitude,
-                'location_source' => $f->location_source,
-                'size_hectares'  => $f->size_hectares,
-                'variety'        => $f->variety,
-                'harvest_months' => $f->harvest_months,
-                'state'          => $f->state,
-                'photos'         => $f->photos->map(fn($p) => [
-                    'url' => $p->s3_url,
-                    'key' => $p->s3_key,
-                ]),
-            ]);
+            ->map(fn($f) => $f->toPortalArray());
 
         return response()->json($farms);
     }

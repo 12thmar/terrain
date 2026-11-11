@@ -55,7 +55,13 @@ export default function Dashboard({ supplier, farms = [], navigate }) {
                         {farms.map(farm => {
                             const colors = STATE_COLORS[farm.state] || STATE_COLORS.draft;
                             return (
-                                <div key={farm.id} className="bg-white rounded-xl border border-gray-100 overflow-hidden">
+                                <div
+                                    key={farm.id}
+                                    onClick={() => navigate('farm-profile', farm)}
+                                    className="bg-white rounded-xl border border-gray-100 overflow-hidden cursor-pointer transition-shadow"
+                                    onMouseEnter={e => (e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.08)')}
+                                    onMouseLeave={e => (e.currentTarget.style.boxShadow = '')}
+                                >
                                     {farm.cover ? (
                                         <img
                                             src={farm.cover}

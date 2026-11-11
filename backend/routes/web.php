@@ -22,13 +22,7 @@ Route::middleware('supplier.auth')->group(function () {
     Route::get('/dashboard', function (Request $request) {
         $supplier = $request->attributes->get('supplier');
         $farms = $supplier->farms()->with('photos')->orderByDesc('created_at')->get()
-            ->map(fn($f) => [
-                'id'     => $f->id,
-                'name'   => $f->name,
-                'region' => $f->region,
-                'state'  => $f->state,
-                'cover'  => $f->photos->first()?->s3_url,
-            ]);
+            ->map(fn($f) => $f->toPortalArray());
         return view('app', ['page' => 'dashboard', 'supplier' => $supplier, 'farms' => $farms]);
     });
     Route::post('/upload/photo', [UploadController::class, 'photo']);

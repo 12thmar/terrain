@@ -19,7 +19,7 @@ const pinIcon = L.divIcon({
     iconAnchor: [11, 22],
 });
 
-export default function MapPicker({ value, onChange }) {
+export default function MapPicker({ value, onChange, readOnly = false }) {
     const containerRef = useRef(null);
     const mapRef = useRef(null);
     const markerRef = useRef(null);
@@ -43,20 +43,22 @@ export default function MapPicker({ value, onChange }) {
 
         const marker = L.marker([start.lat, start.lng], {
             icon: pinIcon,
-            draggable: true,
+            draggable: !readOnly,
             opacity: value?.lat && value?.lng ? 1 : 0, // hidden until a point is set
         }).addTo(map);
 
-        marker.on('dragend', () => {
-            const { lat, lng } = marker.getLatLng();
-            onChangeRef.current?.({ lat, lng });
-        });
+        if (!readOnly) {
+            marker.on('dragend', () => {
+                const { lat, lng } = marker.getLatLng();
+                onChangeRef.current?.({ lat, lng });
+            });
 
-        map.on('click', (e) => {
-            const { lat, lng } = e.latlng;
-            marker.setLatLng([lat, lng]).setOpacity(1);
-            onChangeRef.current?.({ lat, lng });
-        });
+            map.on('click', (e) => {
+                const { lat, lng } = e.latlng;
+                marker.setLatLng([lat, lng]).setOpacity(1);
+                onChangeRef.current?.({ lat, lng });
+            });
+        }
 
         mapRef.current = map;
         markerRef.current = marker;
