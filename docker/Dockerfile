@@ -12,6 +12,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
       libzip-dev \
       libonig-dev \
       libpq-dev \
+      libsqlite3-dev \
       nodejs \
       npm \
     && rm -rf /var/lib/apt/lists/*
