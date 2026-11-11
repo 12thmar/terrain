@@ -122,6 +122,7 @@ Organization (res.company)
 | Frontend | React + Vite + Tailwind | same as buna-sinni |
 | Backend | Laravel | same as buna-jebena |
 | File storage | AWS S3 — dedicated bucket | `terrain-uploads-prod` / `terrain-uploads-dev` |
+| Local DB | Neon PostgreSQL (prod) | auth/session tables; SQLite remains the local/dev + build fallback (`.env.example` default) |
 | Data store | Odoo 18 JSON-RPC | crm.bunaroots.com:8069 |
 | Auth | Google OAuth (laravel/socialite) | same pattern as outreach.bunaroots.com |
 
@@ -198,15 +199,17 @@ terrain_sourcing/
 ### Phase 1 — Odoo Addon (buna-serat) ✅ DONE
 All 7 models built and deployed. `terrain_sourcing` addon installed and active at `crm.bunaroots.com`. GitHub Actions CI wired up and working (OIDC role: `buna-serat-github-deploy`). Workflow now triggers on `addons/**` and `deploy/**` changes.
 
-### Phase 2 — App Scaffold (terrain)
-- Laravel backend: supplier auth, S3 upload endpoint, OdooClient for terrain models
-- React frontend: portal shell, login page, supplier dashboard skeleton
+### Phase 2 — App Scaffold (terrain) ✅ DONE
+- Laravel backend: Google OAuth supplier auth (`AuthController`), S3 upload endpoint (`UploadController`), `OdooClient` service, `Supplier` model + migration
+- React frontend: portal shell (`Layout`), `Login`, `Dashboard` pages
+- Infra: Docker build + GitHub Actions deploy (`main` → `release-to-prod.sh` → `prod`) green as of 2026-11-10 (after `libsqlite3-dev` build fix)
 
-### Phase 3 — Farm + Location
-- Farm registration form (name, region, altitude, variety)
-- Photo upload with client-side EXIF GPS extraction
-- Leaflet.js map fallback for manual pin
-- Farm profile page
+### Phase 3 — Farm + Location 🚧 IN PROGRESS
+- ✅ Farm registration form (name, region, altitude, variety) — `FarmRegister.jsx`
+- ✅ Photo upload with client-side EXIF GPS extraction — `PhotoUpload.jsx`
+- ✅ `FarmController`, `Farm` + `FarmPhoto` models & migrations, dashboard farm list
+- ⬜ Leaflet.js map fallback for manual pin (+ store `confirmed_lat/lng` separate from EXIF)
+- ⬜ Farm profile page (read view)
 
 ### Phase 4 — Farmer + Washing Station
 - Farmer profile form (linked to farm)
@@ -230,4 +233,5 @@ All 7 models built and deployed. `terrain_sourcing` addon installed and active a
 - **Multi-tenancy**: Each customer org = one `res.company` in Odoo. Bunaroots is company 1.
 - **Odoo hosting**: Use existing buna-serat until profitable, then migrate to a dedicated instance
 - **S3**: Dedicated buckets — `terrain-uploads-prod` / `terrain-uploads-dev`. Clean separation from buna-jebena; easy migration later.
+- **Local DB**: Switched SQLite → Neon PostgreSQL for prod (2026-11-09). SQLite kept as local/dev + build fallback — Dockerfile still needs `pdo_sqlite` (+ `libsqlite3-dev`) and entrypoint `touch`es `database.sqlite`. Cleanup candidate: drop SQLite entirely if dev also moves to Neon.
 - **Prompted by**: Thomas @ Red Drum Roasters feedback, 2026-10-27
