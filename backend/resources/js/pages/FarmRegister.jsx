@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Layout from '../components/Layout';
 import PhotoUpload from '../components/PhotoUpload';
+import MapPicker from '../components/MapPicker';
 
 const REGIONS = ['Guji', 'Yirgacheffe', 'Sidama', 'Jimma', 'Limu', 'Harrar', 'Other'];
 
@@ -17,8 +18,9 @@ export default function FarmRegister({ supplier, navigate }) {
         size_hectares: '',
         latitude: '',
         longitude: '',
+        location_source: '',
     });
-    const [photoKeys, setPhotoKeys] = useState([]);
+    const [photos, setPhotos] = useState([]);
     const [submitting, setSubmitting] = useState(false);
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(false);
@@ -27,18 +29,43 @@ export default function FarmRegister({ supplier, navigate }) {
         setForm(prev => ({ ...prev, [field]: value }));
     }
 
+    // Manual typing into the lat/lng inputs — mark the source accordingly.
+    function setCoord(field, value) {
+        setForm(prev => ({ ...prev, [field]: value, location_source: 'manual' }));
+    }
+
     function handleGps({ lat, lng }) {
-        // Only auto-fill if not already set
+        // Auto-fill from photo EXIF only if the user hasn't set a location yet.
+        setForm(prev => {
+            if (prev.latitude && prev.longitude) return prev;
+            return {
+                ...prev,
+                latitude: String(lat.toFixed(6)),
+                longitude: String(lng.toFixed(6)),
+                location_source: 'exif',
+            };
+        });
+    }
+
+    // Dropping/dragging the map pin — authoritative "confirmed" location.
+    function handlePin({ lat, lng }) {
         setForm(prev => ({
             ...prev,
-            latitude: prev.latitude || String(lat.toFixed(6)),
-            longitude: prev.longitude || String(lng.toFixed(6)),
+            latitude: String(lat.toFixed(6)),
+            longitude: String(lng.toFixed(6)),
+            location_source: 'map',
         }));
     }
 
     function handleUploaded(entry) {
-        setPhotoKeys(prev => [...prev, entry.key]);
+        setPhotos(prev => [...prev, { key: entry.key, coords: entry.coords || null }]);
     }
+
+    const LOCATION_LABEL = {
+        exif: 'GPS from photo',
+        map: 'Pinned on map',
+        manual: 'Entered manually',
+    };
 
     async function handleSubmit(e) {
         e.preventDefault();
@@ -49,7 +76,14 @@ export default function FarmRegister({ supplier, navigate }) {
             const res = await fetch('/farms', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': csrf },
-                body: JSON.stringify({ ...form, photo_keys: photoKeys }),
+                body: JSON.stringify({
+                    ...form,
+                    photos: photos.map(p => ({
+                        key: p.key,
+                        latitude: p.coords?.lat ?? null,
+                        longitude: p.coords?.lng ?? null,
+                    })),
+                }),
             });
             const data = await res.json();
             if (!res.ok) throw new Error(data.message || 'Failed to save farm');
@@ -225,12 +259,20 @@ export default function FarmRegister({ supplier, navigate }) {
                     <section className="bg-white rounded-xl border border-gray-100 p-5 space-y-4">
                         <div className="flex items-center justify-between">
                             <h2 className="text-sm font-semibold" style={{ color: '#1e3a2f' }}>Location</h2>
-                            {form.latitude && form.longitude && (
+                            {form.latitude && form.longitude && form.location_source && (
                                 <span className="text-xs px-2 py-0.5 rounded-full" style={{ background: '#edf7ee', color: '#2d6a4f' }}>
-                                    GPS filled from photo
+                                    {LOCATION_LABEL[form.location_source] || 'Location set'}
                                 </span>
                             )}
                         </div>
+
+                        <MapPicker
+                            value={{ lat: form.latitude, lng: form.longitude }}
+                            onChange={handlePin}
+                        />
+                        <p className="text-xs" style={{ color: '#9aab9f' }}>
+                            No GPS in your photo? Click the map to drop a pin, or drag it to fine-tune.
+                        </p>
 
                         <div className="grid grid-cols-2 gap-4">
                             <div>
@@ -241,7 +283,7 @@ export default function FarmRegister({ supplier, navigate }) {
                                     type="number"
                                     step="any"
                                     value={form.latitude}
-                                    onChange={e => set('latitude', e.target.value)}
+                                    onChange={e => setCoord('latitude', e.target.value)}
                                     placeholder="e.g. 6.1250"
                                     className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-800/30"
                                     style={{ borderColor: '#d4cab8' }}
@@ -255,17 +297,13 @@ export default function FarmRegister({ supplier, navigate }) {
                                     type="number"
                                     step="any"
                                     value={form.longitude}
-                                    onChange={e => set('longitude', e.target.value)}
+                                    onChange={e => setCoord('longitude', e.target.value)}
                                     placeholder="e.g. 38.7500"
                                     className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-800/30"
                                     style={{ borderColor: '#d4cab8' }}
                                 />
                             </div>
                         </div>
-                        <p className="text-xs" style={{ color: '#9aab9f' }}>
-                            Upload a photo with GPS metadata and coordinates will fill automatically.
-                            Otherwise enter them manually.
-                        </p>
                     </section>
 
                     {error && (

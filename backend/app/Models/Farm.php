@@ -15,6 +15,7 @@ class Farm extends Model
         'altitude_max',
         'latitude',
         'longitude',
+        'location_source',
         'size_hectares',
         'variety',
         'harvest_months',
